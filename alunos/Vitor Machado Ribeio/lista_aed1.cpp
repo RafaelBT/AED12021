@@ -1,31 +1,34 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <new>
-#include <iostream>
+// Exercício: Programa que calcula seu tempo de execução para encontrar um determinado número no arquivo lista.txt
 
-#define tam 1000000
+#include <time.h>
+#include <stdio.h>
 
 int main(void) {
-    
 
-    FILE * ent = fopen("lista.txt", "r");
+    clock_t ct_i, ct_f;
 
-    int numeroProcurado, numeroLido, posicao = 1;
-    int i;
+    ct_i = clock();
 
-    
-        printf("Digite um numero inteiro positivo para saber se ele esta na lista: ");
-        scanf("%d", &numeroProcurado);
-    
-    
-    
-    for(i=0; i<tam; i++){
-        fscanf(ent, "%d\n", &numeroProcurado); 
-        if(numeroLido == numeroProcurado) break;
-        posicao++;
+    FILE * file = fopen("lista.txt", "r");
+
+    int searchNum, readNum, i = 1;
+
+    do {
+        printf("Digite um numero: ");
+        scanf("%d", &searchNum);
+    } while (searchNum < 0);
+
+    while (fscanf(file, "%d\n", &readNum) == 1) {
+        if (readNum == searchNum) break;
+        i++;
     }
+    printf("\no valor de i %d",i);
 
-    if(i > tam) printf("Desculpe, o seu numero nao esta na lista.");
-    else printf("O numero %d esta na posicao de numero %d.", numeroProcurado, posicao);
+    if (i > 1000000) printf("\nO numero nao foi encontrado.\n");
+    else printf("\nO numero consultado foi encontrado na posicao %d.\n", i);
+
+    ct_f = clock();
+
+    printf("Tempo decorrido: %lfs. \n", ((float)(ct_f - ct_i) / CLOCKS_PER_SEC));
+
 }
