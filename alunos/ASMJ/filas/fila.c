@@ -22,13 +22,14 @@ void imprimeFila(struct Fila *f) {
 void imprimeFilaValores(struct Fila *f) {
 	int aux = f->inicio;
 
+  printf("INICIO\t");
 	for (int i = 0; i < f->tamanho; i++){
 		printf("%d\t", f->dados[aux]);
 
     aux++;
 		if (aux == f->capacidade) aux = 0;
 	}
-	printf("\n");
+  printf("FIM\n");
 }
 
 int criaFila(struct Fila *f, int cap) {
