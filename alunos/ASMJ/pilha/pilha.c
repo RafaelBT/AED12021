@@ -138,10 +138,25 @@ int main () {
   struct Pilha p;
   int aux;
 
-  printf("Qual o tamanho da sua pilha? ");
+  printf("Qual o tamanho máximo da sua pilha? ");
   scanf("%d", &aux);
 
   criaPilha(&p, aux);
+  printf ("Deseja gerar valores aleatórios?\n[1]SIM\n[0]NÃO\n");
+  scanf ("%d", &aux);
+  printf ("\n");
+
+  if(aux == 1) {
+    printf ("Quantos elementos? ");
+    scanf ("%d", &aux);
+    printf ("\n");
+
+    srand((unsigned) time(NULL));
+  
+    for(int i = 0; i < aux; i++ ) {
+      empilha(&p, rand());
+    }
+  }
 
   operacao(&p);  
   

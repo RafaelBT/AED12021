@@ -1,0 +1,17 @@
+operacao,quantidade_de_elementos,tempo_gasto_em_segundos
+pilha,inserir,0,0.000001
+pilha,inserir,10,0.000001
+pilha,inserir,100,0.000001
+pilha,inserir,1000,0.000001
+pilha,inserir,10000,0.000001
+pilha,inserir,100000,0.000001
+pilha,inserir,1000000,0.000001
+pilha,inserir,10000000,0.000002
+pilha,remocao,0,0.000001
+pilha,remocao,10,0.000001
+pilha,remocao,100,0.000001
+pilha,remocao,1000,0.000001
+pilha,remocao,10000,0.000001
+pilha,remocao,100000,0.000001
+pilha,remocao,1000000,0.000001
+pilha,remocao,10000000,0.000002

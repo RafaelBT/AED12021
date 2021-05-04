@@ -1,0 +1,17 @@
+operacao,quantidade_de_elementos,tempo_gasto_em_segundos
+inserir,0,0.000001
+inserir,10,0.000001
+inserir,100,0.000001
+inserir,1000,0.000001
+inserir,10000,0.000001
+inserir,100000,0.000001
+inserir,1000000,0.000001
+inserir,10000000,0.000002
+remocao,0,0.000001
+remocao,10,0.000001
+remocao,100,0.000001
+remocao,1000,0.000001
+remocao,10000,0.000001
+remocao,100000,0.000001
+remocao,1000000,0.000001
+remocao,10000000,0.000002

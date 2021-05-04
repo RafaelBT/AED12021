@@ -155,10 +155,23 @@ int main () {
   struct Fila f;
   int aux;
 
-  printf("Qual o tamanho da sua fila? ");
+  printf("Qual o tamanho máximo da sua fila? ");
   scanf("%d", &aux);
 
   criaFila(&f, aux);
+
+  printf ("Deseja gerar valores aleatórios?\n[1]SIM\n[0]NÃO\n");
+  scanf ("%d", &aux);
+  printf ("\n");
+
+  if(aux == 1) {
+    printf ("\n");
+    srand((unsigned) time(NULL));
+  
+    for(int i = 0; i < f.capacidade; i++ ) {
+      enfilera(&f, rand());
+    }
+  }
 
   operacao(&f);  
   

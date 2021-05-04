@@ -2,30 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
  
-#define TAMANHO 1000000
-
-#define MAXLISTA 1000000
-int geralista(int tam) {
-
-	FILE *file;
-	int i, num;
-
-	if (tam > MAXLISTA) tam = MAXLISTA;
-
-	file = fopen("lista.txt", "w");
-
-	// muda a semente dos números aleatórios
-	srand((unsigned) time(NULL)/2);
-
-	for (i = 0; i < tam; i = i + 1) {
-		num = rand();
-		fprintf(file, "%d\n", num);
-	}
-
-	fclose(file);
-	return 0;
-}
-
+#define TAMANHO 10000000
 
 int buscaLista(int procurado, int *vetor, int tamanho) {
   int i;
@@ -37,6 +14,16 @@ int buscaLista(int procurado, int *vetor, int tamanho) {
   if(i == tamanho) return -1; // se não achou retorna 0
   return i;
 }
+
+int insereSemBusca(int numero, int *vetor, int *tamanho) {
+  if(*tamanho + 1 > TAMANHO) return -1; // se overflow retorna -1;
+
+  vetor[*tamanho] = numero; //vetor começa em 0, então precisa somar depois
+  *tamanho = *tamanho + 1;
+
+  return 0; // se sucesso retorna 0;
+}
+
 
 int insereLista(int numero, int *vetor, int *tamanho) {
   if(*tamanho + 1 > TAMANHO) return -1; // se overflow retorna -1;
@@ -69,21 +56,70 @@ int imprimeLista(int *vetor, int tamanho) {
   for(int i = 0; i < tamanho; i = i + 1) {
     printf("%d está na posição %d.\n", vetor[i], i);
   }
+  return 0;
 }
 
-int iniciarlizarLista(int *vetor, FILE *arq) {
-  int num, i = 0;
+void mergeSort(int *vetor, int posicaoInicio, int posicaoFim) {
+    int i, j, k, metadeTamanho, *vetorTemp;
+    if(posicaoInicio == posicaoFim) return;
+    metadeTamanho = (posicaoInicio + posicaoFim ) / 2;
 
-  while (fscanf(arq, "%d", &num) > 0) {
-    vetor[i] = num;
-    if(i > TAMANHO) {
-      printf("Lista inicial é maior que o tamanho máximo");
-      exit(0);
+    mergeSort(vetor, posicaoInicio, metadeTamanho);
+    mergeSort(vetor, metadeTamanho + 1, posicaoFim);
+
+    i = posicaoInicio;
+    j = metadeTamanho + 1;
+    k = 0;
+    vetorTemp = (int *) malloc(sizeof(int) * (posicaoFim - posicaoInicio + 1));
+
+    while(i < metadeTamanho + 1 || j  < posicaoFim + 1) {
+        if (i == metadeTamanho + 1 ) { 
+            vetorTemp[k] = vetor[j];
+            j++;
+            k++;
+        }
+        else {
+            if (j == posicaoFim + 1) {
+                vetorTemp[k] = vetor[i];
+                i++;
+                k++;
+            }
+            else {
+                if (vetor[i] < vetor[j]) {
+                    vetorTemp[k] = vetor[i];
+                    i++;
+                    k++;
+                }
+                else {
+                    vetorTemp[k] = vetor[j];
+                    j++;
+                    k++;
+                }
+            }
+        }
+
     }
-	  i++;
-  }
+    for(i = posicaoInicio; i <= posicaoFim; i++) {
+       vetor[i] = vetorTemp[i - posicaoInicio];
+    }
+    free(vetorTemp);
+}
 
-  return i;
+
+void insertionSort(int *vetor, int n) { 
+  int i, element, j; 
+  for (i = 1; i < n; i++) { 
+    element = vetor[i];
+
+    j = i - 1; 
+
+    while (j >= 0 && vetor[j] > element) { 
+      vetor[j + 1] = vetor[j]; 
+      j = j - 1; 
+    } 
+
+    vetor[j + 1] = element; 
+  } 
 } 
 
 int operacao(int *vetor, int *tamanho) {
@@ -101,6 +137,8 @@ int operacao(int *vetor, int *tamanho) {
       printf ("2 -- Inserir na lista\n");
       printf ("3 -- Remover da lista\n");
       printf ("4 -- Imprimir lista\n");
+      printf ("5 -- Ordenar Lista (MergeSort)\n");
+      printf ("6 -- Ordenar Lista (InsertSort)\n");
       scanf ("%d", &teclado);
       printf ("\n");
 
@@ -160,6 +198,22 @@ int operacao(int *vetor, int *tamanho) {
           end = clock();
           break;
 
+        case 5:
+          start = clock();
+
+          mergeSort(vetor, 0, *tamanho - 1);
+
+          end = clock();
+          break;
+
+        case 6:
+          start = clock();
+
+          insertionSort(vetor, *tamanho);
+
+          end = clock();
+          break;
+      
         default:
           start = clock();
 
@@ -168,6 +222,8 @@ int operacao(int *vetor, int *tamanho) {
 
           end = clock();
           break;
+
+     
       }
 
     cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
@@ -177,26 +233,27 @@ int operacao(int *vetor, int *tamanho) {
 }
 
 int main () {
+  int *lista = malloc(TAMANHO * sizeof(int));
+  int tamanho = 0;
+
   int aux;
-  printf ("Deseja gerar uma lista nova?\n[1]SIM\n[0]NÃO\n");
+  printf ("Deseja inicalizar com valores aleatórios? AVISO: ISSO PODE GERAR VALORES IGUAIS\n[1]SIM\n[0]NÃO\n");
   scanf ("%d", &aux);
   printf ("\n");
 
   if(aux == 1) {
-    printf ("Qual o tamanho da lista? MAX %d\n", TAMANHO);
+    printf ("Quantos elementos? MAX %d\n", TAMANHO);
     scanf ("%d", &aux);
-    printf ("\n");
-    geralista(aux);
-  }
-
-  int *lista = malloc(TAMANHO * sizeof(int));
-  FILE * entrada = fopen("lista.txt", "r");
-
-  int tamanho = iniciarlizarLista(lista, entrada);
-
-  printf("Lista carregada com %d elementos.\n", tamanho);
+    srand((unsigned) time(NULL)/2);
+  
+    for(int i = 0; i < aux; i++ ) {
+        insereSemBusca(rand(), lista, &tamanho);
+    }
+  } 
 
   operacao(lista, &tamanho);  
+
+  free(lista);
   
   return 0;
 }
